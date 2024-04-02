@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Modal, Button } from "@mui/material";
 import { validate } from "../utils/validate";
+
 const Form = () => {
   const [contactInfo, setContactInfo] = useState({
     name: "default name",
@@ -8,17 +9,19 @@ const Form = () => {
   });
   const [open, setOpen] = useState(false);
   const [valid, setValid] = useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const name = useRef();
+  const email = useRef();
+
   const handleEdit = () => {
     handleOpen();
   };
 
   const onSave = () => {
     const temp = {};
-    temp.name = name.current.value;
+    temp.name = email.current.value;
     // temp.email = email.current.value;
     contactInfo.name = "asda";
 
@@ -28,14 +31,12 @@ const Form = () => {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setValid(validate(value));
+    setValid(validate(value)); // Validate the email value
     setContactInfo((prevContactInfo) => ({
       ...prevContactInfo,
       [id]: value,
     }));
   };
-
-  const styles = { bag: "blue" };
 
   return (
     <div>
@@ -53,18 +54,21 @@ const Form = () => {
         <Modal open={open} onClose={handleClose}>
           <div>
             <input
-              ref={name}
               id="name"
               label="Name"
               value={contactInfo.name}
               onChange={handleChange}
             />
             <input
+              ref={email}
               id="email"
               label="Email"
               value={contactInfo.email}
               onChange={handleChange}
-              className={valid && styles}
+              style={{
+                border: valid ? "1px solid black" : "1px solid red",
+                outline: "none",
+              }}
             />
             <Button variant="contained" onClick={onSave} fullWidth>
               Save
